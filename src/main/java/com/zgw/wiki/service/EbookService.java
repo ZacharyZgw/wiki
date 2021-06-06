@@ -5,6 +5,7 @@ import com.zgw.wiki.domain.EbookExample;
 import com.zgw.wiki.mapper.EbookMapper;
 import com.zgw.wiki.req.EbookReq;
 import com.zgw.wiki.resp.EbookResp;
+import com.zgw.wiki.util.CopyUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,12 +32,7 @@ public class EbookService {
         EbookExample.Criteria criteria = ebookExample.createCriteria();
         criteria.andNameLike("%"+req.getName()+"%");
         List<Ebook> ebookList=ebookMapper.selectByExample(ebookExample);
-        List<EbookResp> ebookReqList = new ArrayList<>();
-        for (Ebook ebook : ebookList) {
-            EbookResp ebookReq = new EbookResp();
-            BeanUtils.copyProperties(ebook,ebookReq);
-            ebookReqList.add(ebookReq);
-        }
-        return ebookReqList;
+        List<EbookResp> ebookResps = CopyUtil.copyList(ebookList, EbookResp.class);
+        return ebookResps;
     }
 }
